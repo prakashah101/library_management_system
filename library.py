@@ -34,7 +34,7 @@ def load_books():
             for line in f:
                 line=line.strip()
                 if line:
-                    book_id,title,author,quantity=line.split()
+                    book_id,title,author,quantity=line.split(',')
                     book={
                         'id':book_id,
                         'title':title,
@@ -72,8 +72,8 @@ def register_user(users_dict):
     print("Registration Successfull")
     return True
 
-users_dict=load_user()
-register_user(users_dict)
+# users_dict=load_user()
+# register_user(users_dict)
 
 def login_user(users_dict):
     print("\n-----Login User-----")
@@ -86,11 +86,63 @@ def login_user(users_dict):
     else:
         print("Invalid username or password!")
         return None
-login_user(users_dict)
+# login_user(users_dict)
 
 # for books
+def main_menu():
+    #display main menu options 
+    print("="*55)
+    print("\nLibrary Management System")
+    print("="*55)
+    print("1. Add book")
+    print("2. View all books")
+    print("3. Search book")
+    print("4. Issue book")
+    print("5. Return book")
+    print("6. Log out")
+    print("="*55)
 
+def add_book(books_list,book_ids):
+    #Add a new book
+    print("\n-----Add new book-----")
+    book_id=input("Enter the book ID: ").strip()
+    if book_id in book_ids:
+        print("Book id already exists!")
+        return
+    title=input("Enter the book title: ").strip()
+    author=input("Enter the book author: ").strip()
+    quantity=int(input("Enter the book quantity: ").strip())
 
+    new_book={
+        'id': book_id,
+        'title': title,
+        'author': author,
+        'quantity': quantity
+    }
+    books_list.append(new_book)
+    book_ids.add(book_id)
+
+    with open('books.txt','a') as f:
+        f.write(f"{book_id},{title},{author},{quantity}\n")
+    print("Book added successfully!")
+    
+books_list=load_books()
+book_ids=get_existing_books_id(books_list)
+print(books_list)
+print(book_ids)
+add_book(books_list,book_ids)
+
+#function to view all the books in the library
+def view_books(books_list):
+    #display all the books 
+    print("\n-----All books in library------")
+    if not books_list:
+        print("No book found in library!")
+        return None
+    for book in books_list:
+        print(f"{book['id']} | {book['title']} | {book['author']} | {book['quantity']}")
+
+view_books(books_list)
 
 
 
